@@ -1,13 +1,11 @@
-/* styles/globals.css */
-
-/* 1. Tailwind’s base styles (resets, typography defaults) */
 @tailwind base;
-
-/* 2. Tailwind’s component classes (buttons, forms, etc.) */
 @tailwind components;
-
-/* 3. Tailwind’s utility classes (margins, flex, colors, etc.) */
 @tailwind utilities;
 
-/* 4. (Optional) Your custom global overrides go here */
-/* body { background-color: #f8f8f8; } */
+/* Custom overrides, if needed */
+.bg-accent {
+  @apply bg-accent;
+}
+.text-accent {
+  @apply text-accent;
+}

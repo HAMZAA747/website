@@ -1,3 +1,5 @@
+// File: components/GrilledBurgers.js
+
 import Image from 'next/image'
 import { useState } from 'react'
 import ProductModal from './ProductModal'
@@ -27,30 +29,44 @@ export default function GrilledBurgers() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const openModal = item => {
+    setSelectedProduct({ ...item, category: 'Grilled Burgers' })
+    setIsModalOpen(true)
+  }
+
   return (
     <section id="grilled-burgers" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-2xl font-semibold mb-6">Grilled Burgers</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {items.map(item => (
-          <div key={item.name} className="bg-white rounded-xl overflow-hidden shadow">
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={360}
-              height={260}
-              className="object-cover"
-            />
-            <div className="p-4">
+          <div
+            key={item.name}
+            onClick={() => openModal(item)}
+            className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow cursor-pointer"
+          >
+            {/* Image */}
+            <div className="relative h-48">
+              <Image
+                src={item.image}
+                alt={item.name}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+            {/* Content */}
+            <div className="p-4 flex flex-col flex-1">
               <h3 className="font-semibold text-lg">{item.name}</h3>
-              <p className="mt-2 text-sm text-gray-600">{item.description}</p>
+              <p className="mt-2 text-sm text-gray-600 flex-1">
+                {item.description}
+              </p>
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-medium">Rs {item.price}</span>
                 <button
-                  className="bg-accent text-black px-3 py-1 rounded-full text-sm font-semibold hover:brightness-90 transition"
-                  onClick={() => {
-                    setSelectedProduct({ ...item, category: 'Grilled Burgers' })
-                    setIsModalOpen(true)
+                  onClick={e => {
+                    e.stopPropagation()
+                    openModal(item)
                   }}
+                  className="bg-accent text-black px-3 py-1 rounded-full text-sm font-semibold hover:brightness-90 transition"
                 >
                   Add to Cart
                 </button>
@@ -60,7 +76,7 @@ export default function GrilledBurgers() {
         ))}
       </div>
 
-      {/* Customization Modal */}
+      {/* Modal */}
       <ProductModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

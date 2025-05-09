@@ -1,4 +1,4 @@
-// File: website/components/LoadedFries.js
+// File: components/LoadedFries.js
 
 import Image from 'next/image'
 import { useState } from 'react'
@@ -7,70 +7,54 @@ import ProductModal from './ProductModal'
 export default function LoadedFries() {
   const items = [
     {
-      name: 'Nashville Hot Crunch',
-      price: 745,
-      description: 'Crispy Nashville fillet, Buffalo sauce, melted cheese with toppings.',
-      image: '/images/nashville-hot-crunch.jpg',
+      name: 'Cartel Cheese Fries',
+      price: 499,
+      description: 'Loaded fries smothered in melted cheese, crispy bacon bits, and scallions.',
+      image: '/images/fries/cartel-cheese-fries.jpg',
     },
     {
-      name: 'Sweet Chilli Loaded',
-      price: 745,
-      description: 'Grilled Sweet Chilli thigh, Sweet Chilli sauce, melted cheese with toppings.',
-      image: '/images/sweet-chilli-loaded.jpg',
+      name: 'Chili Cheese Fries',
+      price: 519,
+      description: 'Fries topped with spicy chili con carne and oozy cheddar.',
+      image: '/images/fries/chili-cheese-fries.jpg',
     },
     {
-      name: 'Fiery Peri Loaded',
-      price: 745,
-      description: 'Grilled Peri thigh, Fiery Peri sauce, melted cheese with toppings.',
-      image: '/images/fiery-peri-loaded.jpg',
-    },
-    {
-      name: 'Malai Boti Loaded',
-      price: 745,
-      description: 'Grilled Malai thigh boti, Garlic Mayo, melted cheese with toppings.',
-      image: '/images/malai-boti-loaded.jpg',
-    },
-    {
-      name: 'Plain Fries',
-      price: 245,
-      description: 'Crispy, golden straight-cut fries—simple, clean, and freshly fried. Let the flavor come from what you pair them with.',
-      image: '/images/plain-fries.jpg',
-    },
-    {
-      name: 'Cartel Crush (Masala Fries)',
-      price: 295,
-      description: 'Straight-cut fries dusted with our signature Cartel spice blend—bold, flavorful, and perfectly crisp.',
-      image: '/images/cartel-crush.jpg',
+      name: 'Bacon Ranch Fries',
+      price: 529,
+      description: 'Crispy fries drizzled with ranch sauce and sprinkled with bacon.',
+      image: '/images/fries/bacon-ranch-fries.jpg',
     },
   ]
 
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [isModalOpen,    setIsModalOpen]    = useState(false)
+  const [selected, setSelected] = useState(null)
+  const [open, setOpen] = useState(false)
+
+  const openModal = item => {
+    setSelected({ ...item, category: 'Loaded Fries' })
+    setOpen(true)
+  }
 
   return (
     <section id="loaded-fries" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-2xl font-semibold mb-6">Loaded Fries</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {items.map(item => (
-          <div key={item.name} className="bg-white rounded-xl overflow-hidden shadow">
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={360}
-              height={260}
-              className="object-cover"
-            />
-            <div className="p-4">
+          <div
+            key={item.name}
+            onClick={() => openModal(item)}
+            className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow cursor-pointer"
+          >
+            <div className="relative h-48 w-full">
+              <Image src={item.image} alt={item.name} layout="fill" objectFit="cover" />
+            </div>
+            <div className="p-4 flex flex-col flex-1">
               <h3 className="font-semibold text-lg">{item.name}</h3>
-              <p className="mt-2 text-sm text-gray-600">{item.description}</p>
+              <p className="mt-2 text-sm text-gray-600 flex-1">{item.description}</p>
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-medium">Rs {item.price}</span>
                 <button
+                  onClick={e => { e.stopPropagation(); openModal(item) }}
                   className="bg-accent text-black px-3 py-1 rounded-full text-sm font-semibold hover:brightness-90 transition"
-                  onClick={() => {
-                    setSelectedProduct({ ...item, category: 'Loaded Fries' })
-                    setIsModalOpen(true)
-                  }}
                 >
                   Add to Cart
                 </button>
@@ -80,12 +64,7 @@ export default function LoadedFries() {
         ))}
       </div>
 
-      {/* Customization Modal */}
-      <ProductModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        product={selectedProduct}
-      />
+      <ProductModal isOpen={open} onClose={() => setOpen(false)} product={selected} />
     </section>
-  )
+)
 }

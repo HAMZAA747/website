@@ -1,4 +1,4 @@
-// File: website/components/ProductModal.js
+// File: components/ProductModal.js
 
 import { useState, useEffect } from 'react'
 import { useCart } from '@/context/CartContext'
@@ -6,12 +6,20 @@ import { useCart } from '@/context/CartContext'
 export default function ProductModal({ isOpen, onClose, product }) {
   const { addItem } = useCart()
   const [qty, setQty] = useState(1)
-  const [veggies, setVeggies] = useState({ jalapeno: false, pickle: false, onion: false })
+  const [veggies, setVeggies] = useState({
+    jalapeno: false,
+    pickle: false,
+    onion: false
+  })
   const [cheese, setCheese] = useState(false)
-  const [dips, setDips] = useState({ garlicMayo: false, fieryPeri: false, sweetChilli: false })
+  const [dips, setDips] = useState({
+    garlicMayo: false,
+    fieryPeri: false,
+    sweetChilli: false
+  })
   const [instructions, setInstructions] = useState('')
 
-  // Reset state when modal opens or product changes
+  // Reset state whenever modal opens or product changes
   useEffect(() => {
     if (isOpen) {
       setQty(1)
@@ -24,28 +32,32 @@ export default function ProductModal({ isOpen, onClose, product }) {
 
   if (!isOpen || !product) return null
 
-  // Calculate selected options & pricing
+  // Destructure for clarity
+  const { name, description, price, category } = product
+
+  // Calculate options
   const selectedVeggies = Object.keys(veggies).filter(k => veggies[k])
   const selectedDips = Object.keys(dips).filter(k => dips[k])
   const optionsPrice =
     selectedVeggies.length * 20 +
     (cheese ? 99 : 0) +
-    (product.category === 'Sides' ? selectedDips.length * 99 : 0)
-  const unitPrice = product.price + optionsPrice
+    (category === 'Sides' ? selectedDips.length * 99 : 0)
+
+  const unitPrice = price + optionsPrice
   const totalPrice = unitPrice * qty
 
   function handleAdd() {
     addItem({
-      id: product.name,
-      name: product.name,
+      id: name,
+      name,
       price: unitPrice,
       qty,
       options: {
         veggies: selectedVeggies,
         cheese: cheese ? ['cheese'] : [],
-        dips: selectedDips,
+        dips: selectedDips
       },
-      instructions,
+      instructions
     })
     onClose()
   }
@@ -53,9 +65,12 @@ export default function ProductModal({ isOpen, onClose, product }) {
   return (
     <div className="fixed inset-0 z-40 flex">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={onClose}
+      />
 
-      {/* Modal Container */}
+      {/* Modal */}
       <div className="relative ml-auto w-full max-w-sm h-full bg-white shadow-lg flex flex-col">
         <button
           className="absolute top-3 right-3 text-2xl"
@@ -63,95 +78,92 @@ export default function ProductModal({ isOpen, onClose, product }) {
         >&times;</button>
 
         <div className="p-4 flex-1 overflow-y-auto">
-          <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-          <p className="text-gray-600 mb-4">{product.description}</p>
+          <h3 className="text-xl font-semibold mb-2">{name}</h3>
+          <p className="text-gray-600 mb-4">{description}</p>
 
-          {/* Dips for Sides */}
-          {product.category === 'Sides' && (
-            <>
+          {/* Veggies */}
+          <div className="mb-4">
+            <h4 className="font-medium mb-1">Veggies (Rs 20 each)</h4>
+            {['jalapeno','pickle','onion'].map(key => (
+              <label key={key} className="flex items-center space-x-2 mb-1">
+                <input
+                  type="checkbox"
+                  checked={veggies[key]}
+                  onChange={() =>
+                    setVeggies(v => ({ ...v, [key]: !v[key] }))
+                  }
+                />
+                <span className="capitalize">{key}</span>
+              </label>
+            ))}
+          </div>
+
+          {/* Cheese */}
+          <div className="mb-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={cheese}
+                onChange={() => setCheese(c => !c)}
+              />
+              <span>Cheese (Rs 99)</span>
+            </label>
+          </div>
+
+          {/* Dips (only on Sides) */}
+          {category === 'Sides' && (
+            <div className="mb-4">
               <h4 className="font-medium mb-1">Dips (Rs 99 each)</h4>
               {[
-                ['garlicMayo', 'Garlic Mayo'],
-                ['fieryPeri', 'Fiery Peri'],
-                ['sweetChilli', 'Sweet Chilli'],
-              ].map(([key, label]) => (
+                ['garlicMayo','Garlic Mayo'],
+                ['fieryPeri','Fiery Peri'],
+                ['sweetChilli','Sweet Chilli']
+              ].map(([key,label]) => (
                 <label key={key} className="flex items-center space-x-2 mb-1">
                   <input
                     type="checkbox"
                     checked={dips[key]}
-                    onChange={() => setDips(prev => ({ ...prev, [key]: !prev[key] }))}
+                    onChange={() =>
+                      setDips(d => ({ ...d, [key]: !d[key] }))
+                    }
                   />
                   <span>{label}</span>
                 </label>
               ))}
-              <hr className="my-4" />
-            </>
-          )}
-
-          {/* Veggie Toppings */}
-          {product.category !== 'Beef Burgers' &&
-           product.category !== 'Loaded Fries' &&
-           product.category !== 'Sides' && (
-            <>
-              <h4 className="font-medium mb-1">Veggie Toppings (Rs 20 each)</h4>
-              {['jalapeno', 'pickle', 'onion'].map(v => (
-                <label key={v} className="flex items-center space-x-2 mb-1">
-                  <input
-                    type="checkbox"
-                    checked={veggies[v]}
-                    onChange={() => setVeggies(prev => ({ ...prev, [v]: !prev[v] }))}
-                  />
-                  <span className="capitalize">{v}</span>
-                </label>
-              ))}
-              <hr className="my-4" />
-            </>
-          )}
-
-          {/* Cheese for Grilled & Crispy Burgers */}
-          {(product.category === 'Grilled Burgers' ||
-            product.category === 'Crispy Burgers') && (
-            <>
-              <h4 className="font-medium mb-1">Cheese (Rs 99)</h4>
-              <label className="flex items-center space-x-2 mb-4">
-                <input
-                  type="checkbox"
-                  checked={cheese}
-                  onChange={() => setCheese(!cheese)}
-                />
-                <span>Add Slice</span>
-              </label>
-              <hr className="my-4" />
-            </>
+            </div>
           )}
 
           {/* Special Instructions */}
-          <h4 className="font-medium mb-1">Special Instructions</h4>
-          <textarea
-            rows={2}
-            value={instructions}
-            onChange={e => setInstructions(e.target.value)}
-            className="w-full border rounded px-2 py-1 mb-4"
-            placeholder="e.g. less spicy, extra crisp…"
-          />
-
-          {/* Quantity & Pricing */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
-              <button onClick={() => setQty(q => Math.max(1, q - 1))}>–</button>
-              <span>{qty}</span>
-              <button onClick={() => setQty(q => q + 1)}>+</button>
-            </div>
-            <span className="font-semibold">Rs {totalPrice}</span>
+          <div className="mb-4">
+            <label className="block mb-1">Special Instructions</label>
+            <textarea
+              className="w-full border border-gray-300 p-2 rounded"
+              rows={3}
+              value={instructions}
+              onChange={e => setInstructions(e.target.value)}
+            />
           </div>
 
-          {/* Add to Cart Action */}
-          <button
-            className="w-full bg-accent text-black py-2 rounded-full font-semibold"
-            onClick={handleAdd}
-          >
-            Add to Cart
-          </button>
+          {/* Quantity & Add */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <button
+                className="px-2 border rounded"
+                onClick={() => setQty(q => Math.max(1, q - 1))}
+              >–</button>
+              <span>{qty}</span>
+              <button
+                className="px-2 border rounded"
+                onClick={() => setQty(q => q + 1)}
+              >+</button>
+            </div>
+            <button
+              className="bg-accent text-black px-4 py-2 rounded-full font-semibold hover:brightness-90 transition"
+              onClick={handleAdd}
+            >
+              Add | Rs {totalPrice}
+            </button>
+          </div>
         </div>
       </div>
     </div>

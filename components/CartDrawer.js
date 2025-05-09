@@ -1,4 +1,4 @@
-// File: website/components/CartDrawer.js
+// File: components/CartDrawer.js
 
 import { useState } from 'react'
 import { useCart } from '@/context/CartContext'
@@ -8,8 +8,16 @@ export default function CartDrawer({ isOpen, onClose }) {
   const { items, updateQty, subtotal, gst, total } = useCart()
   const [step, setStep] = useState(0)
   const [method, setMethod] = useState(null)      // 'takeaway' or 'delivery'
-  const [pickupTime, setPickupTime] = useState('') 
-  const [address, setAddress] = useState('')      
+  const [pickupTime, setPickupTime] = useState('')
+  const [address, setAddress] = useState('')
+
+  function reset() {
+    setStep(0)
+    setMethod(null)
+    setPickupTime('')
+    setAddress('')
+    onClose()
+  }
 
   if (!isOpen) return null
 
@@ -18,7 +26,7 @@ export default function CartDrawer({ isOpen, onClose }) {
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/50"
-        onClick={() => { onClose(); setStep(0); setMethod(null) }}
+        onClick={reset}
       />
 
       {/* Drawer */}
@@ -28,7 +36,7 @@ export default function CartDrawer({ isOpen, onClose }) {
           <h2 className="text-lg font-semibold">🛒 My Cart ({items.length})</h2>
           <button
             className="text-2xl leading-none"
-            onClick={() => { onClose(); setStep(0); setMethod(null) }}
+            onClick={reset}
           >&times;</button>
         </div>
 
@@ -38,7 +46,9 @@ export default function CartDrawer({ isOpen, onClose }) {
           {step === 0 && items.map((item, idx) => (
             <div key={idx} className="flex items-center justify-between mb-4">
               <div>
-                <p className="font-medium">{item.name}</p>
+                <p className="font-medium cursor-pointer" onClick={reset /* could open modal */}>
+                  {item.name}
+                </p>
                 <div className="flex items-center space-x-2 text-sm">
                   <button
                     className="px-2"
@@ -64,15 +74,18 @@ export default function CartDrawer({ isOpen, onClose }) {
                 {['takeaway','delivery'].map(m => (
                   <button
                     key={m}
-                    className={`px-4 py-2 rounded-full ${
-                      method===m ? 'bg-accent text-black' : 'border'
+                    className={`px-4 py-2 rounded-full border ${
+                      method===m
+                        ? 'bg-accent text-white'
+                        : 'text-gray-700'
                     }`}
                     onClick={() => setMethod(m)}
                   >
-                    {m.charAt(0).toUpperCase() + m.slice(1)}
+                    {m === 'takeaway' ? 'Take Away' : 'Delivery'}
                   </button>
                 ))}
               </div>
+
               {method === 'takeaway' && (
                 <>
                   <p className="mb-2">
@@ -88,6 +101,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                   />
                 </>
               )}
+
               {method === 'delivery' && (
                 <>
                   <label className="block mb-1">Delivery Address:</label>
@@ -135,7 +149,10 @@ export default function CartDrawer({ isOpen, onClose }) {
               <p className="mb-4">
                 Then WhatsApp the screenshot to +92 337 556 1898.
               </p>
-              <button className="w-full bg-accent text-black px-4 py-2 rounded-full">
+              <button
+                className="w-full bg-accent text-white px-4 py-2 rounded-full"
+                onClick={reset}
+              >
                 Confirm Order
               </button>
             </>
@@ -152,7 +169,10 @@ export default function CartDrawer({ isOpen, onClose }) {
               <p className="mb-4">
                 You’ll receive a WhatsApp confirmation shortly.
               </p>
-              <button className="w-full bg-accent text-black px-4 py-2 rounded-full">
+              <button
+                className="w-full bg-accent text-white px-4 py-2 rounded-full"
+                onClick={reset}
+              >
                 Confirm Order
               </button>
             </>
@@ -174,18 +194,16 @@ export default function CartDrawer({ isOpen, onClose }) {
             <button
               onClick={() => setStep(prev => Math.max(prev - 1, 0))}
               className="flex-1 border px-4 py-2 rounded-full"
-            >Back</button>
-            {step < 1 && (
+            >
+              Back
+            </button>
+            {step < 2 && (
               <button
-                onClick={() => setStep(1)}
-                className="flex-1 bg-accent text-black px-4 py-2 rounded-full"
-              >Next</button>
-            )}
-            {step === 1 && method && (
-              <button
-                onClick={() => setStep(2)}
-                className="flex-1 bg-accent text-black px-4 py-2 rounded-full"
-              >Next</button>
+                onClick={() => setStep(prev => prev + 1)}
+                className="flex-1 bg-accent text-white px-4 py-2 rounded-full"
+              >
+                Next
+              </button>
             )}
           </div>
         </div>
