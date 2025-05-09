@@ -2,10 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom overrides, if needed */
+/*
+  Use these only if you really need a named class—
+  otherwise you can just use `bg-accent` and `text-accent` directly.
+*/
 .bg-accent {
-  @apply bg-accent;
+  /* Pulls from your tailwind.config.js colors.accent */
+  background-color: theme('colors.accent');
 }
 .text-accent {
-  @apply text-accent;
+  color: theme('colors.accent');
 }
