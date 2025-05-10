@@ -1,4 +1,4 @@
-// File: components/CrispyBurgers.js
+// components/CrispyBurgers.js
 
 import Image from 'next/image'
 import { useState } from 'react'
@@ -7,22 +7,22 @@ import ProductModal from './ProductModal'
 export default function CrispyBurgers() {
   const items = [
     {
-      name: 'Crispy Chicken Supreme',
-      price: 649,
-      description: 'Crispy fried chicken patty, fresh lettuce, pickles, and our signature mayo.',
-      image: '/images/crispy/crispy-chicken-supreme.jpg',
+      name: 'The Red Agent',
+      price: 695,
+      description: 'Spicy premium Nashville-style fillet, Buffalo sauce, all stacked in a buttery Brioche Bun.',
+      image: '/images/crispy/the-red-agent.jpg',
     },
     {
-      name: 'Cartel Crunch Burger',
-      price: 629,
-      description: 'Double-crunch chicken, spicy slaw, and zesty sauce on a buttery brioche bun.',
-      image: '/images/crispy/cartel-crunch-burger.jpg',
+      name: 'The Runner',
+      price: 395,
+      description: 'Single crispy patty, creamy house blend, all stacked in a soft sesame bun.',
+      image: '/images/crispy/the-runner.jpg',
     },
     {
-      name: 'Spicy Crunch Deluxe',
-      price: 639,
-      description: 'Crispy chicken with fiery Peri dust, jalapeños, and melted cheese.',
-      image: '/images/crispy/spicy-crunch-deluxe.jpg',
+      name: 'The Crunch Dealer',
+      price: 425,
+      description: 'Classic crispy Zinger fillet, house special drizzle, all stacked in a soft sesame bun.',
+      image: '/images/crispy/the-crunch-dealer.jpg',
     },
   ]
 
@@ -59,7 +59,9 @@ export default function CrispyBurgers() {
               <h3 className="font-semibold text-xl mb-1">{item.name}</h3>
               <p className="text-gray-600 text-sm flex-1">{item.description}</p>
               <div className="mt-4 flex items-center justify-between">
-                <span className="font-bold text-lg">Rs {item.price}</span>
+                <span className="font-bold text-lg text-[#f2aa21]">
+                  Rs {item.price}
+                </span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
