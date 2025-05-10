@@ -7,7 +7,7 @@ import ProductModal from './ProductModal'
 export default function BeefBurgers() {
   const items = [
     {
-      name: 'Cartel Smash',
+      name: 'Cartel Samsh',
       price: 690,
       description:
         'Crispy-edged beef patty, melted cheese, all stacked in a buttery brioche bun.',
@@ -50,7 +50,6 @@ export default function BeefBurgers() {
             onKeyPress={(e) => e.key === 'Enter' && openModal(item)}
             className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow hover:shadow-lg cursor-pointer transition"
           >
-            {/* Image */}
             <div className="relative h-48 w-full">
               <Image
                 src={item.image}
@@ -59,12 +58,11 @@ export default function BeefBurgers() {
                 objectFit="cover"
               />
             </div>
-            {/* Content */}
             <div className="p-4 flex flex-col flex-1">
-              <h3 className="font-semibold text-lg">{item.name}</h3>
+              <h3 className="font-semibold text-lg text-black">{item.name}</h3>
               <p className="mt-2 text-gray-600 flex-1">{item.description}</p>
               <div className="mt-4 flex items-center justify-between">
-                <span className="font-medium">Rs {item.price}</span>
+                <span className="font-medium text-black">Rs {item.price}</span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
