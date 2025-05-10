@@ -22,7 +22,7 @@ const beefItems = [
     id: 3,
     name: 'Big Stack',
     image: '/images/big-stack.jpg',
-    description: 'Double beef patties, melted cheese, all stacked in a buttery Brioche Bun.',
+    description: 'Double beef patties, all stacked in a buttery Brioche Bun.',
     price: 960,
   },
 ]
@@ -49,13 +49,15 @@ export default function BeefBurgers() {
               />
             </div>
             <div className="p-4 bg-white">
-              <h3 className="text-xl font-semibold">{item.name}</h3>
+              {/* Item title in solid black */}
+              <h3 className="text-xl font-semibold text-black">{item.name}</h3>
               <p className="mt-2 text-gray-700">{item.description}</p>
-              {/* Bold price */}
-              <p className="mt-4 text-lg font-bold">Rs {item.price}</p>
+              {/* Price stays bold black */}
+              <p className="mt-4 text-lg font-bold text-black">Rs {item.price}</p>
+              {/* Button in accent f2aa21 */}
               <button
                 onClick={e => { e.stopPropagation(); addToCart(item) }}
-                className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition"
+                className="mt-4 px-4 py-2 bg-accent text-white rounded-full hover:bg-accent-hover transition"
               >
                 Add to Cart
               </button>
@@ -63,8 +65,6 @@ export default function BeefBurgers() {
           </div>
         ))}
       </div>
-
-      {/* Include your modal component at the end */}
       <ProductModal />
     </section>
   )
