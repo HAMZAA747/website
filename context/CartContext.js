@@ -1,61 +1,40 @@
-// File: context/CartContext.js
+// context/CartContext.js
 import React, { createContext, useContext, useState } from 'react'
 
-// 1. Create context with a safe default shape
-const CartContext = createContext({
-  items: [],
-  addItem: () => {},
-  removeItem: () => {},
-  updateQty: () => {},
-  subtotal: 0,
-  gst: 0,
-  total: 0,
-})
+const CartContext = createContext()
 
-// 2. Convenience hook
-export const useCart = () => useContext(CartContext)
-
-// 3. Provider
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalItem, setModalItem] = useState(null)
 
-  const addItem = (newItem) => {
-    setItems(prev => {
-      const idx = prev.findIndex(
-        i => i.id === newItem.id && JSON.stringify(i.options) === JSON.stringify(newItem.options)
-      )
-      if (idx > -1) {
-        const updated = [...prev]
-        updated[idx].qty += newItem.qty
-        return updated
-      }
-      return [...prev, newItem]
-    })
+  const addItem = (item) => {
+    setCartItems((prev) => [...prev, item])
   }
 
-  const removeItem = (itemId, options) => {
-    setItems(prev =>
-      prev.filter(i => !(i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options)))
-    )
+  const openModal = (item) => {
+    setModalItem(item)
+    setIsModalOpen(true)
   }
 
-  const updateQty = (itemId, options, qty) => {
-    setItems(prev =>
-      prev.map(i =>
-        i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options)
-          ? { ...i, qty }
-          : i
-      )
-    )
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setModalItem(null)
   }
-
-  const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0)
-  const gst      = +(subtotal * 0.15).toFixed(0)
-  const total    = subtotal + gst
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, subtotal, gst, total }}>
+    <CartContext.Provider
+      value={{ cartItems, addItem, isModalOpen, modalItem, openModal, closeModal }}
+    >
       {children}
     </CartContext.Provider>
   )
+}
+
+export function useCart() {
+  const context = useContext(CartContext)
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider')
+  }
+  return context
 }
