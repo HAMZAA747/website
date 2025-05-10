@@ -1,22 +1,30 @@
-// website/context/CartContext.js
-import { createContext, useContext, useState } from 'react'
+// File: context/CartContext.js
+import React, { createContext, useContext, useState } from 'react'
 
-// 1. Create the context
-const CartContext = createContext()
+// 1. Create context with a safe default shape
+const CartContext = createContext({
+  items: [],
+  addItem: () => {},
+  removeItem: () => {},
+  updateQty: () => {},
+  subtotal: 0,
+  gst: 0,
+  total: 0,
+})
 
-// 2. Hook for easy access
+// 2. Convenience hook
 export const useCart = () => useContext(CartContext)
 
-// 3. Provider component
+// 3. Provider
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
 
-  // Add or update an item in the cart
-  function addItem(newItem) {
+  const addItem = (newItem) => {
     setItems(prev => {
-      const idx = prev.findIndex(i => i.id === newItem.id && JSON.stringify(i.options) === JSON.stringify(newItem.options))
+      const idx = prev.findIndex(
+        i => i.id === newItem.id && JSON.stringify(i.options) === JSON.stringify(newItem.options)
+      )
       if (idx > -1) {
-        // merge quantities
         const updated = [...prev]
         updated[idx].qty += newItem.qty
         return updated
@@ -25,37 +33,28 @@ export function CartProvider({ children }) {
     })
   }
 
-  // Remove an item entirely
-  function removeItem(itemId, options) {
-    setItems(prev => prev.filter(i =>
-      !(i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options))
-    ))
+  const removeItem = (itemId, options) => {
+    setItems(prev =>
+      prev.filter(i => !(i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options)))
+    )
   }
 
-  // Update quantity for a specific item
-  function updateQty(itemId, options, qty) {
-    setItems(prev => prev.map(i =>
-      i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options)
-        ? { ...i, qty }
-        : i
-    ))
+  const updateQty = (itemId, options, qty) => {
+    setItems(prev =>
+      prev.map(i =>
+        i.id === itemId && JSON.stringify(i.options) === JSON.stringify(options)
+          ? { ...i, qty }
+          : i
+      )
+    )
   }
 
-  // Compute subtotal, GST, total, etc.
   const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0)
   const gst      = +(subtotal * 0.15).toFixed(0)
   const total    = subtotal + gst
 
   return (
-    <CartContext.Provider value={{
-      items,
-      addItem,
-      removeItem,
-      updateQty,
-      subtotal,
-      gst,
-      total
-    }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, subtotal, gst, total }}>
       {children}
     </CartContext.Provider>
   )
