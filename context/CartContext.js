@@ -1,40 +1,17 @@
 // context/CartContext.js
-import React, { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 
-const CartContext = createContext()
+export const CartContext = createContext()
 
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalItem, setModalItem] = useState(null)
+  const [cart, setCart] = useState([])
 
-  const addItem = (item) => {
-    setCartItems((prev) => [...prev, item])
-  }
-
-  const openModal = (item) => {
-    setModalItem(item)
-    setIsModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setModalItem(null)
-  }
+  const addToCart = (item) => setCart((c) => [...c, item])
+  const removeFromCart = (id) => setCart((c) => c.filter((x) => x.id !== id))
 
   return (
-    <CartContext.Provider
-      value={{ cartItems, addItem, isModalOpen, modalItem, openModal, closeModal }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   )
-}
-
-export function useCart() {
-  const context = useContext(CartContext)
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider')
-  }
-  return context
 }
