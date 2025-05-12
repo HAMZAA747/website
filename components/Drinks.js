@@ -1,57 +1,57 @@
 // components/Drinks.js
-
+import React from 'react'
 import Image from 'next/image'
-import { useState } from 'react'
-import ProductModal from './ProductModal'
+import { useCartContext } from '@/context/CartContext'
 
-export default function Drinks() {
-  const items = [
-    {
-      name: 'Regular Drink',
-      price: 120,
-      description: 'Chilled 330 ml can of your favorite soft drink — perfect with any meal.',
-      image: '/images/drinks/regular-drink.jpg',
-    },
-    {
-      name: 'Regular Water',
-      price: 80,
-      description: 'Pure spring water in a 330 ml bottle — refreshing and crisp.',
-      image: '/images/drinks/regular-water.jpg',
-    },
-    {
-      name: '1.5 Ltr Drink',
-      price: 200,
-      description: 'Family-sized 1.5 L bottle of soft drink — great for sharing.',
-      image: '/images/drinks/1-5ltr-drink.jpg',
-    },
-    {
-      name: '1.5 Ltr Water',
-      price: 120,
-      description: '1.5 L bottle of purified water — stay hydrated.',
-      image: '/images/drinks/1-5ltr-water.jpg',
-    },
-  ]
+const drinkItems = [
+  {
+    id: 'regular-drink',
+    name: 'Regular Drink',
+    description: 'Chilled soft drink to refresh your meal.',
+    price: 120,
+    image: '/images/drinks/regular-drink.jpg',
+  },
+  {
+    id: 'regular-water',
+    name: 'Regular Water',
+    description: 'Fresh, clean, and pure water to keep you hydrated.',
+    price: 80,
+    image: '/images/drinks/regular-water.jpg',
+  },
+  {
+    id: 'large-drink',
+    name: '1.5 LTR Drink',
+    description: 'Big bottle for big thirsts, perfect for sharing.',
+    price: 200,
+    image: '/images/drinks/1-5ltr-drink.jpg',
+  },
+  {
+    id: 'large-water',
+    name: '1.5 LTR Water',
+    description: 'Large pure water bottle for the whole table.',
+    price: 120,
+    image: '/images/drinks/1-5ltr-water.jpg',
+  },
+]
 
-  const [selected, setSelected] = useState(null)
-  const [open, setOpen] = useState(false)
+export default function Drinks({ searchQuery }) {
+  const { openModal, addToCart } = useCartContext()
 
-  const openModal = item => {
-    setSelected({ ...item, category: 'Drinks' })
-    setOpen(true)
-  }
+  // Filter items based on search query
+  const filtered = drinkItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
-    <section id="drinks" className="max-w-7xl mx-auto px-4 py-12">
+    <section id="drinks" className="py-12 px-4">
       <h2 className="text-3xl font-semibold mb-8">Drinks</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {items.map(item => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filtered.map(item => (
           <div
-            key={item.name}
-            role="button"
-            tabIndex={0}
-            onClick={() => openModal(item)}
-            onKeyPress={e => e.key === 'Enter' && openModal(item)}
+            key={item.id}
             className="flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
+            onClick={() => openModal(item)}
           >
             <div className="relative h-48 w-full">
               <Image
@@ -67,11 +67,11 @@ export default function Drinks() {
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation()
-                    openModal(item)
+                    addToCart(item)
                   }}
-                  className="bg-[#f2aa21] text-black px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition"
+                  className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
                 </button>
@@ -80,12 +80,6 @@ export default function Drinks() {
           </div>
         ))}
       </div>
-
-      <ProductModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        product={selected}
-      />
     </section>
   )
 }

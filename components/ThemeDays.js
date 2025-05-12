@@ -1,40 +1,58 @@
 // components/ThemeDays.js
-
-import React from 'react'
+import { useState, useEffect } from 'react';
 
 const themeDays = [
   {
     name: 'Wing Wednesday',
     description: 'Free wings with 3 burgers',
+    day: 'Wednesday',
   },
   {
     name: 'Shake Sunday',
     description: 'Pay extra ₹200 to convert your meal drink to shake',
+    day: 'Sunday',
   },
-]
+];
 
 export default function ThemeDays() {
+  const [currentDay, setCurrentDay] = useState('');
+
+  useEffect(() => {
+    // Determine the current weekday in Asia/Karachi timezone
+    const today = new Date().toLocaleString('en-US', {
+      weekday: 'long',
+      timeZone: 'Asia/Karachi',
+    });
+    setCurrentDay(today);
+  }, []);
+
   return (
-    <section id="theme-days" className="py-12">
-      <h2 className="text-2xl font-bold mb-6">Theme Days</h2>
+    <section id="theme-days" className="py-12 px-4 max-w-7xl mx-auto">
+      <h2 className="text-3xl font-semibold mb-8">Theme Days</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {themeDays.map(day => (
-          <div
-            key={day.name}
-            className="p-6 rounded-xl shadow bg-white flex flex-col justify-between"
-          >
-            <h3 className="text-lg font-semibold mb-2 text-black">
-              {day.name}
-            </h3>
-            <p className="text-sm flex-grow text-black">
-              {day.description}
-            </p>
-            <span className="mt-4 inline-block px-4 py-2 rounded-full text-sm bg-accent text-black font-medium">
-              Open
-            </span>
-          </div>
-        ))}
+        {themeDays.map((dayObj) => {
+          const isOpen = currentDay === dayObj.day;
+          return (
+            <div
+              key={dayObj.name}
+              className="p-6 rounded-xl shadow-lg bg-white flex flex-col justify-between"
+            >
+              <h3 className="text-xl font-semibold mb-2 text-black">
+                {dayObj.name}
+              </h3>
+              <p className="text-sm text-gray-700 flex-grow">
+                {dayObj.description}
+              </p>
+              <span
+                className={`mt-4 inline-block px-4 py-2 rounded-full text-sm font-medium
+                  ${isOpen ? 'bg-[#f2aa21] text-black' : 'bg-gray-300 text-gray-600'}`}
+              >
+                {isOpen ? 'Open' : 'Coming Soon'}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </section>
-  )
+  );
 }

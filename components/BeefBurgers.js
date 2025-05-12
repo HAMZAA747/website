@@ -1,64 +1,66 @@
-import React, { useContext } from 'react'
+// components/BeefBurgers.js
+import React from 'react'
 import Image from 'next/image'
-import { CartContext } from '../context/CartContext'
-import ProductModal from './ProductModal'
+import { useCartContext } from '@/context/CartContext'
 
 const beefItems = [
   {
-    id: 1,
+    id: 'cartel-smash',
     name: 'Cartel Smash',
-    // Updated image path to match actual filename in public/images
-    image: '/images/cartel-samsh.jpg',
-    description: 'Crispy-edged beef patty, all stacked in a buttery Brioche Bun.',
+    description: 'Crispy-edged beef patty, melted cheese, all stacked in a buttery Brioche bun.',
     price: 690,
+    image: '/images/cartel-smash.jpg',
   },
   {
-    id: 2,
+    id: 'oklahoma',
     name: 'Oklahoma',
-    image: '/images/oklahoma.jpg',
-    description: 'Beef patties, caramelized onions, all stacked in a buttery Brioche Bun.',
+    description: 'Beef patties, caramelized onions, melted cheese, all stacked in a buttery Brioche bun.',
     price: 995,
+    image: '/images/oklahoma.jpg',
   },
   {
-    id: 3,
+    id: 'big-stack',
     name: 'Big Stack',
-    image: '/images/big-stack.jpg',
-    description: 'Double beef patties, all stacked in a buttery Brioche Bun.',
+    description: 'Double beef patties, melted cheese, all stacked in a buttery Brioche bun.',
     price: 960,
+    image: '/images/big-stack.jpg',
   },
 ]
 
-export default function BeefBurgers() {
-  const { addToCart, openModal } = useContext(CartContext)
+export default function BeefBurgers({ searchQuery }) {
+  const { openModal } = useCartContext()
+
+  // Filter items based on search query
+  const filtered = beefItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
-    <section id="beef-burgers" className="py-12 px-4">
+    <section id="beef-burgers" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-semibold mb-6">Beef Burgers</h2>
       <div className="grid gap-8 md:grid-cols-3">
-        {beefItems.map(item => (
+        {filtered.map(item => (
           <div
             key={item.id}
             className="relative rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
-            onClick={() => openModal(item)}
+            onClick={() => openModal({ ...item, category: 'Beef Burgers' })}
           >
             <div className="relative h-48 w-full">
               <Image
                 src={item.image}
                 alt={item.name}
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </div>
             <div className="p-4 bg-white">
-              {/* Item title in solid black */}
               <h3 className="text-xl font-semibold text-black">{item.name}</h3>
               <p className="mt-2 text-gray-700">{item.description}</p>
-              {/* Price stays bold black */}
               <p className="mt-4 text-lg font-bold text-black">Rs {item.price}</p>
-              {/* Button in accent f2aa21 */}
               <button
-                onClick={e => { e.stopPropagation(); addToCart(item) }}
-                className="mt-4 px-4 py-2 bg-accent text-white rounded-full hover:bg-accent-hover transition"
+                onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Beef Burgers' }) }}
+                className="mt-4 px-4 py-2 bg-accent text-black rounded-full hover:bg-accent-hover transition"
               >
                 Add to Cart
               </button>
@@ -66,7 +68,6 @@ export default function BeefBurgers() {
           </div>
         ))}
       </div>
-      <ProductModal />
     </section>
   )
 }

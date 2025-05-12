@@ -1,69 +1,71 @@
-// File: components/LoadedFries.js
-
+// components/LoadedFries.js
+import React from 'react'
 import Image from 'next/image'
-import { useState } from 'react'
-import ProductModal from './ProductModal'
+import { useCartContext } from '@/context/CartContext'
 
-export default function LoadedFries() {
-  const items = [
-    {
-      name: 'Nashville Hot Crunch',
-      price: 745,
-      description: 'Crispy fries tossed in Nashville hot seasoning — bold, spicy, and unforgettable.',
-      image: '/images/fries/nashville-hot-crunch.jpg',
-    },
-    {
-      name: 'Sweet Chilli Loaded',
-      price: 745,
-      description: 'Straight-cut fries dusted with our signature Sweet Chilli spice blend — sweet heat, perfectly crisp.',
-      image: '/images/fries/sweet-chilli-loaded.jpg',
-    },
-    {
-      name: 'Fiery Peri Loaded',
-      price: 745,
-      description: 'Loaded fries coated in our bold Fiery Peri sauce — vibrant, spicy, and tough to resist.',
-      image: '/images/fries/fiery-peri-loaded.jpg',
-    },
-    {
-      name: 'Malai Boti Loaded',
-      price: 745,
-      description: 'Fries topped with creamy Malai Boti sauce and tender chicken bits — rich, smooth, and indulgent.',
-      image: '/images/fries/malai-boti-loaded.jpg',
-    },
-    {
-      name: 'Plain Fries',
-      price: 245,
-      description: 'Crispy, golden straight-cut fries — simple, clean, and freshly fried. Let the flavor come from what you pair them with.',
-      image: '/images/fries/plain-fries.jpg',
-    },
-    {
-      name: 'Cartel Crush (Masala Fries)',
-      price: 295,
-      description: 'Straight-cut fries dusted with our signature Cartel spice blend — bold, flavorful, and perfectly crisp.',
-      image: '/images/fries/cartel-crush.jpg',
-    },
-  ]
+const friesItems = [
+  {
+    id: 'nashville-hot-crunch',
+    name: 'Nashville Hot Crunch',
+    description: 'Crispy Nashville fillet, Buffalo sauce, melted cheese with toppings.',
+    price: 745,
+    image: '/images/fries/nashville-hot-crunch.jpg',
+  },
+  {
+    id: 'sweet-chilli-loaded',
+    name: 'Sweet Chilli Loaded',
+    description: 'Straight-cut fries dusted with our signature Sweet Chilli spice blend — sweet heat, perfectly crisp.',
+    price: 745,
+    image: '/images/fries/sweet-chilli-loaded.jpg',
+  },
+  {
+    id: 'fiery-peri-loaded',
+    name: 'Fiery Peri Loaded',
+    description: 'Loaded fries coated in our bold Fiery Peri sauce — vibrant, spicy, and tough to resist.',
+    price: 745,
+    image: '/images/fries/fiery-peri-loaded.jpg',
+  },
+  {
+    id: 'malai-boti-loaded',
+    name: 'Malai Boti Loaded',
+    description: 'Fries topped with creamy Malai Boti sauce and tender chicken bits — rich, smooth, and indulgent.',
+    price: 745,
+    image: '/images/fries/malai-boti-loaded.jpg',
+  },
+  {
+    id: 'plain-fries',
+    name: 'Plain Fries',
+    description: 'Crispy, golden straight-cut fries — simple, clean, and freshly fried. Let the flavor come from what you pair them with.',
+    price: 245,
+    image: '/images/fries/plain-fries.jpg',
+  },
+  {
+    id: 'cartel-crush',
+    name: 'Cartel Crush',
+    description: 'Straight-cut fries dusted with our signature Cartel spice blend — bold, flavorful, and perfectly crisp.',
+    price: 295,
+    image: '/images/fries/cartel-crush.jpg',
+  },
+]
 
-  const [selected, setSelected] = useState(null)
-  const [open, setOpen] = useState(false)
+export default function LoadedFries({ searchQuery }) {
+  const { openModal, addToCart } = useCartContext()
 
-  const openModal = item => {
-    setSelected({ ...item, category: 'Loaded Fries' })
-    setOpen(true)
-  }
+  // filter items by name or description
+  const filtered = friesItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <section id="loaded-fries" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-semibold mb-8">Loaded Fries</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-        {items.map(item => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filtered.map(item => (
           <div
-            key={item.name}
-            role="button"
-            tabIndex={0}
-            onClick={() => openModal(item)}
-            onKeyPress={e => e.key === 'Enter' && openModal(item)}
+            key={item.id}
             className="flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
+            onClick={() => openModal({ ...item, category: 'Loaded Fries' })}
           >
             <div className="relative h-48 w-full">
               <Image
@@ -79,8 +81,11 @@ export default function LoadedFries() {
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => { e.stopPropagation(); openModal(item) }}
-                  className="bg-[#f2aa21] text-black px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition"
+                  onClick={e => {
+                    e.stopPropagation()
+                    addToCart({ ...item, category: 'Loaded Fries' })
+                  }}
+                  className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
                 </button>
@@ -89,8 +94,6 @@ export default function LoadedFries() {
           </div>
         ))}
       </div>
-      <ProductModal isOpen={open} onClose={() => setOpen(false)} product={selected} />
     </section>
   )
 }
-

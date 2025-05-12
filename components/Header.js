@@ -1,18 +1,46 @@
 // components/Header.js
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { HiOutlineShoppingCart } from 'react-icons/hi'
+import { useCartContext } from '@/context/CartContext'
+
+const categories = [
+  { id: 'wraps', label: 'Grill Wraps' },
+  { id: 'beef-burgers', label: 'Beef Burgers' },
+  { id: 'crispy-burgers', label: 'Crispy Burgers' },
+  { id: 'loaded-fries', label: 'Loaded Fries' },
+  { id: 'sides', label: 'Sides' },
+  { id: 'shakes', label: 'Shakes' },
+  { id: 'drinks', label: 'Drinks' },
+]
 
 export default function Header() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [activeCat, setActiveCat] = useState(categories[0].id)
+  const { openModal } = useCartContext()
+
+  // Scroll to section on category click
+  const handleCategoryClick = (id) => {
+    setActiveCat(id)
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // TODO: implement search logic in parent component via context or props
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value)
+    // dispatch searchQuery to filter items globally
+  }
+
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/">
           <a className="flex items-center">
             <Image
-              src="/logo.png"           // point to your logo asset
+              src="/logo.png"
               alt="Burgers Cartel"
               width={40}
               height={40}
@@ -20,9 +48,19 @@ export default function Header() {
           </a>
         </Link>
 
+        {/* Search Input */}
+        <div className="flex-1 px-4">
+          <input
+            type="text"
+            placeholder="Search menu..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
         {/* Contact + Cart */}
         <div className="flex items-center space-x-4">
-          {/* WhatsApp */}
           <a
             href="https://wa.me/923375561898"
             target="_blank"
@@ -33,15 +71,34 @@ export default function Header() {
             <span className="text-sm font-medium">+92 337 556 1898</span>
           </a>
 
-          {/* Add to Cart */}
-          <Link href="/cart">
-            <a className="flex items-center px-3 py-1 rounded-full bg-yellow-500 hover:bg-yellow-600 transition text-white text-sm font-medium">
-              <HiOutlineShoppingCart className="text-lg mr-2" />
-              Add to Cart
-            </a>
-          </Link>
+          <button
+            onClick={() => openModal({})}
+            className="flex items-center px-3 py-1 rounded-full bg-accent hover:bg-accent-dark transition text-white text-sm font-medium"
+          >
+            <HiOutlineShoppingCart className="text-lg mr-2" />
+            View Cart
+          </button>
         </div>
       </div>
+
+      {/* Category Pill Bar */}
+      <nav className="bg-white border-t border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ul className="flex space-x-4 overflow-x-auto py-2">
+            {categories.map((cat) => (
+              <li key={cat.id}>
+                <button
+                  onClick={() => handleCategoryClick(cat.id)}
+                  className={`px-4 py-1 rounded-full whitespace-nowrap transition 
+                    ${activeCat === cat.id ? 'bg-accent text-black' : 'bg-gray-200 text-gray-700'}`.trim()}
+                >
+                  {cat.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
     </header>
   )
 }

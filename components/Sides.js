@@ -1,72 +1,84 @@
-// File: components/Sides.js
-
+// components/Sides.js
+import React from 'react'
 import Image from 'next/image'
-import { useState } from 'react'
-import ProductModal from './ProductModal'
+import { useCartContext } from '@/context/CartContext'
 
-export default function Sides() {
-  const items = [
-    {
-      name: 'Tender Strips',
-      price: 410,
-      description: 'Golden, crispy chicken tenders — juicy inside, perfect crunch. Served with your choice of dip.',
-      image: '/images/sides/tender-strips.jpg',
-    },
-    {
-      name: 'Chicken Nuggets',
-      price: 345,
-      description: 'Bite-sized crispy nuggets with golden crunch and tender core — served with your favorite dip.',
-      image: '/images/sides/nuggets.jpg',
-    },
-    {
-      name: 'Sweet Chili Wings',
-      price: 450,
-      description: 'Crispy wings glazed in glossy Sweet Chili sauce — clash of heat and sweetness.',
-      image: '/images/sides/sweet-chili-wings.jpg',
-    },
-    {
-      name: 'Garlic Mayo Wings',
-      price: 450,
-      description: 'Golden-fried wings tossed in rich garlic mayo — creamy, garlicky, dangerously addictive.',
-      image: '/images/sides/garlic-mayo-wings.jpg',
-    },
-    {
-      name: 'Fiery Peri Wings',
-      price: 450,
-      description: 'Crispy bone-in wings coated in bold Fiery Peri sauce — spicy, vibrant, packed with heat.',
-      image: '/images/sides/fiery-peri-wings.jpg',
-    },
-  ]
+const sidesItems = [
+  {
+    id: 'tender-strips',
+    name: 'Tender Strips',
+    description: 'Golden, crispy chicken tenders — juicy on the inside, coated for the perfect crunch.',
+    price: 410,
+    image: '/images/sides/tender-strips.jpg',
+  },
+  {
+    id: 'nuggets',
+    name: 'Nuggets',
+    description: 'Bite-sized crispy chicken nuggets with a golden crunch and tender core.',
+    price: 345,
+    image: '/images/sides/nuggets.jpg',
+  },
+  {
+    id: 'sweet-chili-wings',
+    name: 'Sweet Chili Wings',
+    description: 'Crispy golden wings glazed in a glossy Sweet Chili sauce.',
+    price: 450,
+    image: '/images/sides/sweet-chili-wings.jpg',
+  },
+  {
+    id: 'garlic-mayo-wings',
+    name: 'Garlic Mayo Wings',
+    description: 'Golden-fried wings tossed in rich, velvety garlic mayo — creamy, garlicky, and dangerously addictive.',
+    price: 450,
+    image: '/images/sides/garlic-mayo-wings.jpg',
+  },
+  {
+    id: 'fiery-peri-wings',
+    name: 'Fiery Peri Wings',
+    description: 'Crispy bone-in wings coated in our bold Fiery Peri sauce — spicy, vibrant, and packed with heat.',
+    price: 450,
+    image: '/images/sides/fiery-peri-wings.jpg',
+  },
+]
 
-  const [selected, setSelected] = useState(null)
-  const [open, setOpen] = useState(false)
+export default function Sides({ searchQuery }) {
+  const { openModal, addToCart } = useCartContext()
 
-  const openModal = item => {
-    setSelected({ ...item, category: 'Sides' })
-    setOpen(true)
-  }
+  // filter items by name or description
+  const filtered = sidesItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
-    <section id="sides" className="max-w-7xl mx-auto px-4 py-12">
-      <h2 className="text-2xl font-semibold mb-6">Sides</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {items.map(item => (
+    <section id="sides" className="py-12 px-4">
+      <h2 className="text-3xl font-semibold mb-8">Sides</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filtered.map(item => (
           <div
-            key={item.name}
+            key={item.id}
+            className="flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
             onClick={() => openModal(item)}
-            className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow cursor-pointer"
           >
             <div className="relative h-48 w-full">
-              <Image src={item.image} alt={item.name} layout="fill" objectFit="cover" />
+              <Image
+                src={item.image}
+                alt={item.name}
+                fill
+                style={{ objectFit: 'cover' }}
+              />
             </div>
-            <div className="p-4 flex flex-col flex-1">
-              <h3 className="font-semibold text-lg">{item.name}</h3>
-              <p className="mt-2 text-sm text-gray-600 flex-1">{item.description}</p>
+            <div className="p-5 flex flex-col flex-1">
+              <h3 className="font-semibold text-xl mb-1 text-black">{item.name}</h3>
+              <p className="text-gray-600 text-sm flex-1">{item.description}</p>
               <div className="mt-4 flex items-center justify-between">
-                <span className="font-medium">Rs {item.price}</span>
+                <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => { e.stopPropagation(); openModal(item) }}
-                  className="bg-accent text-black px-3 py-1 rounded-full text-sm font-semibold hover:brightness-90 transition"
+                  onClick={e => {
+                    e.stopPropagation()
+                    addToCart(item)
+                  }}
+                  className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
                 </button>
@@ -75,8 +87,6 @@ export default function Sides() {
           </div>
         ))}
       </div>
-
-      <ProductModal isOpen={open} onClose={() => setOpen(false)} product={selected} />
     </section>
-)
+  )
 }

@@ -1,4 +1,4 @@
-// components/FloatingActions.js
+/// components/FloatingActions.js
 
 import { FaWhatsapp }        from 'react-icons/fa'
 import { HiOutlineArrowUp }  from 'react-icons/hi'
@@ -24,7 +24,8 @@ export default function FloatingActions() {
         onClick={scrollToTop}
         className="w-12 h-12 bg-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition"
       >
-        <HiOutlineArrowUp className="text-white text-xl" />
+        {/* Arrow now uses accent color (#f2aa21) */}
+        <HiOutlineArrowUp className="text-accent text-xl" />
       </button>
     </div>
   )

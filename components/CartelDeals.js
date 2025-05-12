@@ -1,5 +1,6 @@
 // components/CartelDeals.js
-import { useState } from 'react';
+import { useState } from 'react'
+import { useCartContext } from '@/context/CartContext'
 
 const DEALS = [
   {
@@ -73,27 +74,28 @@ const DEALS = [
     ],
     price: 1450
   }
-];
+]
 
-export default function CartelDeals() {
-  const [openKey, setOpenKey] = useState<string | null>(null);
+export default function CartelDeals({ searchQuery }) {
+  const { addToCart } = useCartContext()
+  const [openKey, setOpenKey] = useState(null)
+
+  // Filter deals based on search query
+  const filteredDeals = DEALS.filter(deal =>
+    deal.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <section id="cartel-deals" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-serif text-white mb-8">Cartel Deals</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {DEALS.map(deal => {
-          const isOpen = openKey === deal.key;
+        {filteredDeals.map(deal => {
+          const isOpen = openKey === deal.key
           return (
             <div
               key={deal.key}
               onClick={() => setOpenKey(isOpen ? null : deal.key)}
-              className={`
-                cursor-pointer select-none rounded-xl p-6 shadow-lg
-                bg-black bg-opacity-50
-                hover:bg-black hover:bg-opacity-75
-                transition
-              `}
+              className="cursor-pointer select-none rounded-xl p-6 shadow-lg bg-black bg-opacity-50 hover:bg-black hover:bg-opacity-75 transition"
             >
               <h3 className="text-2xl font-semibold text-white">
                 {deal.name}{' '}
@@ -113,6 +115,10 @@ export default function CartelDeals() {
                   {deal.price} RS
                 </span>
                 <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    addToCart(deal)
+                  }}
                   className="px-4 py-1 rounded-full text-sm bg-[#f2aa21] text-black"
                 >
                   Add to Cart
@@ -121,14 +127,13 @@ export default function CartelDeals() {
 
               {isOpen && (
                 <div className="mt-4 p-4 bg-gray-800 rounded-md text-gray-300 text-sm">
-                  <strong>Special instructions:</strong> Let us know any custom
-                  preferences when you check out!
+                  <strong>Special instructions:</strong> Let us know any custom preferences when you check out!
                 </div>
               )}
             </div>
-          );
+          )
         })}
       </div>
     </section>
-  );
+  )
 }
