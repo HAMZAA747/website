@@ -7,7 +7,8 @@ const beefItems = [
   {
     id: 1,
     name: 'Cartel Smash',
-    image: '/images/cartel-smash.jpg',
+    // Updated image path to match actual filename in public/images
+    image: '/images/cartel-samsh.jpg',
     description: 'Crispy-edged beef patty, all stacked in a buttery Brioche Bun.',
     price: 690,
   },
