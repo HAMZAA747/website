@@ -14,6 +14,10 @@ import CartelDeals from '@/components/CartelDeals'
 import ThemeDays from '@/components/ThemeDays'
 import { FaWhatsapp } from 'react-icons/fa'
 
+// Safe toLowerCase function to avoid errors
+const safeToLowerCase = (value) => 
+  value && typeof value === 'string' ? value.toLowerCase() : '';
+
 export default function Home() {
   return (
     <Layout>
