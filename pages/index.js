@@ -1,3 +1,5 @@
+// pages/index.js
+
 import Head from 'next/head'
 import Layout from '@/components/Layout'
 import GrilledBurgers from '@/components/GrilledBurgers'
@@ -7,7 +9,7 @@ import Wraps from '@/components/Wraps'
 import LoadedFries from '@/components/LoadedFries'
 import Shakes from '@/components/Shakes'
 import Sides from '@/components/Sides'
-import Addons from '@/components/Addons'  {/* Renamed from Drinks */}
+import Addons from '@/components/Addons'  // Renamed from Drinks
 import CartelDeals from '@/components/CartelDeals'
 import ThemeDays from '@/components/ThemeDays'
 import { FaWhatsapp } from 'react-icons/fa'
