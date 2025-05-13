@@ -1,6 +1,6 @@
-import Image from 'next/image'
-import { useState } from 'react'
-import ProductModal from './ProductModal'
+import Image from 'next/image';
+import { useState } from 'react';
+import ProductModal from './ProductModal';
 
 export default function Addons() {
   const items = [
@@ -54,27 +54,27 @@ export default function Addons() {
       description: 'Bold and spicy peri peri sauce for serious heat.',
       image: '/images/addons/fiery-peri.jpg',
     },
-  ]
+  ];
 
-  const [selected, setSelected] = useState(null)
-  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const openModal = (item) => {
-    setSelected({ ...item, category: 'Addons' })
-    setOpen(true)
-  }
+  const openModal = item => {
+    setSelected({ ...item, category: 'Addons' });
+    setOpen(true);
+  };
 
   return (
     <section id="addons" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-semibold mb-8">Addons</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {items.map((item) => (
+        {items.map(item => (
           <div
             key={item.id}
             role="button"
             tabIndex={0}
             onClick={() => openModal(item)}
-            onKeyPress={(e) => e.key === 'Enter' && openModal(item)}
+            onKeyPress={e => e.key === 'Enter' && openModal(item)}
             className="flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
           >
             <div className="relative h-48 w-full">
@@ -92,9 +92,9 @@ export default function Addons() {
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    openModal(item) 
+                  onClick={e => {
+                    e.stopPropagation();
+                    openModal(item);
                   }}
                   className="bg-[#f2aa21] text-black px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition"
                 >
@@ -112,5 +112,5 @@ export default function Addons() {
         product={selected}
       />
     </section>
-  )
+  );
 }

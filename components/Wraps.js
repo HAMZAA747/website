@@ -1,5 +1,3 @@
-// components/Wraps.js
-import React from 'react';
 import { useCartContext } from '@/context/CartContext';
 import ProductModal from './ProductModal';
 

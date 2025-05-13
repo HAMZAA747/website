@@ -1,6 +1,5 @@
-// components/CartelDeals.js
-import { useState } from 'react'
-import { useCartContext } from '@/context/CartContext'
+import { useState } from 'react';
+import { useCartContext } from '@/context/CartContext';
 
 const DEALS = [
   {
@@ -74,23 +73,24 @@ const DEALS = [
     ],
     price: 1450
   }
-]
+];
 
 export default function CartelDeals({ searchQuery }) {
-  const { addToCart } = useCartContext()
-  const [openKey, setOpenKey] = useState(null)
+  const { addToCart } = useCartContext();
+  const [openKey, setOpenKey] = useState(null);
 
   // Filter deals based on search query
+  const query = (searchQuery || '').toLowerCase();
   const filteredDeals = DEALS.filter(deal =>
-    deal.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+    deal.name.toLowerCase().includes(query)
+  );
 
   return (
     <section id="cartel-deals" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-serif text-white mb-8">Cartel Deals</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredDeals.map(deal => {
-          const isOpen = openKey === deal.key
+          const isOpen = openKey === deal.key;
           return (
             <div
               key={deal.key}
@@ -115,9 +115,9 @@ export default function CartelDeals({ searchQuery }) {
                   {deal.price} RS
                 </span>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    addToCart(deal)
+                  onClick={e => {
+                    e.stopPropagation();
+                    addToCart(deal);
                   }}
                   className="px-4 py-1 rounded-full text-sm bg-[#f2aa21] text-black"
                 >
@@ -131,9 +131,9 @@ export default function CartelDeals({ searchQuery }) {
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }

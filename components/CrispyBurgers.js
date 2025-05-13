@@ -1,8 +1,6 @@
-// components/CrispyBurgers.js
-import React from 'react'
-import Image from 'next/image'
-import { useCartContext } from '@/context/CartContext'
-import ProductModal from './ProductModal'
+import Image from 'next/image';
+import { useCartContext } from '@/context/CartContext';
+import ProductModal from './ProductModal';
 
 const crispyItems = [
   {
@@ -26,16 +24,17 @@ const crispyItems = [
     price: 425,
     image: '/images/crispy/the-crunch-dealer.jpg',
   },
-]
+];
 
 export default function CrispyBurgers({ searchQuery }) {
-  const { addToCart, openModal } = useCartContext()
+  const { addToCart, openModal } = useCartContext();
 
-  // filter items by name or description
+  // Filter items based on search query
+  const query = (searchQuery || '').toLowerCase();
   const filtered = crispyItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+    item.name.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query)
+  );
 
   return (
     <section id="crispy-burgers" className="py-12 px-4">
@@ -58,10 +57,11 @@ export default function CrispyBurgers({ searchQuery }) {
             <div className="p-5 flex flex-col flex-1">
               <h3 className="font-semibold text-xl mb-1 text-black">{item.name}</h3>
               <p className="text-gray-600 text-sm flex-1">{item.description}</p>
+
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => { e.stopPropagation(); addToCart(item) }}
+                  onClick={e => { e.stopPropagation(); addToCart(item); }}
                   className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
@@ -74,5 +74,5 @@ export default function CrispyBurgers({ searchQuery }) {
       {/* Global Product Modal */}
       <ProductModal />
     </section>
-  )
+  );
 }
