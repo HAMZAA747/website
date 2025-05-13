@@ -1,6 +1,3 @@
-// components/ThemeDays.js
-import { useState, useEffect } from 'react';
-
 const themeDays = [
   {
     name: 'Wing Wednesday',
@@ -9,7 +6,7 @@ const themeDays = [
   },
   {
     name: 'Shake Sunday',
-    description: 'Pay extra ₹200 to convert your meal drink to shake',
+    description: 'Pay extra Rs 200 to convert your meal drink to shake',
     day: 'Sunday',
   },
 ];
@@ -44,8 +41,9 @@ export default function ThemeDays() {
                 {dayObj.description}
               </p>
               <span
-                className={`mt-4 inline-block px-4 py-2 rounded-full text-sm font-medium
-                  ${isOpen ? 'bg-[#f2aa21] text-black' : 'bg-gray-300 text-gray-600'}`}
+                className={`mt-4 inline-block px-4 py-2 rounded-full text-sm font-medium ${
+                  isOpen ? 'bg-[#f2aa21] text-black' : 'bg-gray-300 text-gray-600'
+                }`}
               >
                 {isOpen ? 'Open' : 'Coming Soon'}
               </span>

@@ -5,7 +5,6 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-
         {/* About Us with faint logo background */}
         <div className="relative overflow-hidden p-4">
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -19,7 +18,10 @@ export default function Footer() {
           </div>
           <h3 className="relative z-10 text-lg font-semibold mb-4">About Us</h3>
           <p className="relative z-10 text-sm leading-relaxed">
-            At Burgers Cartel, every bite is a heist of flavor—luxurious brioche buns cradle handcrafted patties seared to perfection, each layered with rich sauces and premium toppings. Born in Bahria Phase 7, we meld modern “mafia” swagger with gourmet precision. Welcome to the Cartel of Flavor.
+            At Burgers Cartel, every bite is a heist of flavor—luxurious brioche buns cradle 
+            handcrafted patties seared to perfection, each layered with rich sauces and 
+            premium toppings. Born in Bahria Phase 7, we meld modern “mafia” swagger with 
+            gourmet precision. Welcome to the Cartel of Flavor.
           </p>
         </div>
 
@@ -42,13 +44,13 @@ export default function Footer() {
           <h3 className="text-lg font-semibold mb-4">Our Timings</h3>
           <ul className="text-sm leading-snug space-y-1">
             <li>
-              <span className="font-medium">Monday – Thursday:</span> 1:00 AM – 1:00 PM
+              <span className="font-medium">Monday – Thursday:</span> 1:00 PM – 1:00 AM
             </li>
             <li>
-              <span className="font-medium">Friday:</span> 2:00 PM – 1:00 AM
+              <span className="font-medium">Friday:</span> 1:00 PM – 1:00 AM
             </li>
             <li>
-              <span className="font-medium">Saturday – Sunday:</span> 1:00 AM – 1:00 PM
+              <span className="font-medium">Saturday – Sunday:</span> 1:00 PM – 1:00 AM
             </li>
           </ul>
         </div>
@@ -68,7 +70,6 @@ export default function Footer() {
             </a>
           </div>
         </div>
-
       </div>
     </footer>
   )

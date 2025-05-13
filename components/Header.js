@@ -1,4 +1,3 @@
-// components/Header.js
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -7,13 +6,16 @@ import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { useCartContext } from '@/context/CartContext'
 
 const categories = [
-  { id: 'wraps', label: 'Grill Wraps' },
+  { id: 'grilled-burgers', label: 'Grilled Burgers' },
   { id: 'beef-burgers', label: 'Beef Burgers' },
   { id: 'crispy-burgers', label: 'Crispy Burgers' },
+  { id: 'wraps', label: 'Wraps' },
   { id: 'loaded-fries', label: 'Loaded Fries' },
   { id: 'sides', label: 'Sides' },
   { id: 'shakes', label: 'Shakes' },
-  { id: 'drinks', label: 'Drinks' },
+  { id: 'addons', label: 'Addons' },
+  { id: 'cartel-deals', label: 'Cartel Deals' },
+  { id: 'theme-days', label: 'Theme Days' },
 ]
 
 export default function Header() {
@@ -27,12 +29,6 @@ export default function Header() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // TODO: implement search logic in parent component via context or props
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value)
-    // dispatch searchQuery to filter items globally
-  }
-
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
@@ -40,8 +36,8 @@ export default function Header() {
         <Link href="/">
           <a className="flex items-center">
             <Image
-              src="/logo.png"
-              alt="Burgers Cartel"
+              src="/images/logo.png"
+              alt="Burgers Cartel Logo"
               width={40}
               height={40}
             />
@@ -54,7 +50,7 @@ export default function Header() {
             type="text"
             placeholder="Search menu..."
             value={searchQuery}
-            onChange={handleSearchChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
           />
         </div>
@@ -89,8 +85,11 @@ export default function Header() {
               <li key={cat.id}>
                 <button
                   onClick={() => handleCategoryClick(cat.id)}
-                  className={`px-4 py-1 rounded-full whitespace-nowrap transition 
-                    ${activeCat === cat.id ? 'bg-accent text-black' : 'bg-gray-200 text-gray-700'}`.trim()}
+                  className={`px-4 py-1 rounded-full whitespace-nowrap transition ${
+                    activeCat === cat.id 
+                      ? 'bg-accent text-black' 
+                      : 'bg-gray-200 text-gray-700'
+                  }`.trim()}
                 >
                   {cat.label}
                 </button>

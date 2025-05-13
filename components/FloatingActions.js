@@ -1,7 +1,5 @@
-/// components/FloatingActions.js
-
-import { FaWhatsapp }        from 'react-icons/fa'
-import { HiOutlineArrowUp }  from 'react-icons/hi'
+import { FaWhatsapp } from 'react-icons/fa'
+import { HiOutlineArrowUp } from 'react-icons/hi'
 
 export default function FloatingActions() {
   const scrollToTop = () =>
@@ -9,7 +7,7 @@ export default function FloatingActions() {
 
   return (
     <div className="fixed right-4 bottom-8 flex flex-col space-y-4 z-50">
-      {/* WhatsApp */}
+      {/* WhatsApp Contact */}
       <a
         href="https://wa.me/923375561898"
         target="_blank"
@@ -22,10 +20,10 @@ export default function FloatingActions() {
       {/* Scroll to Top */}
       <button
         onClick={scrollToTop}
-        className="w-12 h-12 bg-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition"
+        className="w-12 h-12 bg-white rounded-full border border-gray-300 flex items-center justify-center shadow-lg hover:scale-105 transition"
       >
-        {/* Arrow now uses accent color (#f2aa21) */}
-        <HiOutlineArrowUp className="text-accent text-xl" />
+        {/* Arrow icon colored in accent (#f2aa21) */}
+        <HiOutlineArrowUp className="text-[#f2aa21] text-xl" />
       </button>
     </div>
   )
