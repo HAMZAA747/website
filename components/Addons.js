@@ -2,7 +2,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 import ProductModal from './ProductModal';
 
-export default function Addons() {
+// Safe function for toLowerCase
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
+export default function Addons({ searchQuery }) {
   const items = [
     {
       id: 'regular-drink',
@@ -59,6 +63,13 @@ export default function Addons() {
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
 
+  // Filter items based on search query
+  const query = safeToLowerCase(searchQuery);
+  const filtered = items.filter(item =>
+    safeToLowerCase(item.name).includes(query) ||
+    safeToLowerCase(item.description).includes(query)
+  );
+
   const openModal = item => {
     setSelected({ ...item, category: 'Addons' });
     setOpen(true);
@@ -68,7 +79,7 @@ export default function Addons() {
     <section id="addons" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-semibold mb-8">Addons</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {items.map(item => (
+        {filtered.map(item => (
           <div
             key={item.id}
             role="button"

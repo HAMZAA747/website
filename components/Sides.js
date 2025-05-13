@@ -41,14 +41,19 @@ const sidesItems = [
   },
 ]
 
+// Safe function for toLowerCase
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
 export default function Sides({ searchQuery }) {
   const { openModal, addToCart } = useCartContext()
 
-  // filter items by name or description
+  // Filter items by name or description
+  const query = safeToLowerCase(searchQuery);
   const filtered = sidesItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+    safeToLowerCase(item.name).includes(query) ||
+    safeToLowerCase(item.description).includes(query)
+  );
 
   return (
     <section id="sides" className="py-12 px-4">

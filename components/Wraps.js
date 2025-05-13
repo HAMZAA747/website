@@ -25,14 +25,24 @@ const wrapItems = [
   },
 ];
 
-export default function Wraps() {
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
+export default function Wraps({ searchQuery }) {
   const { addToCart, openModal } = useCartContext();
+
+  // Filter items based on search query
+  const query = safeToLowerCase(searchQuery);
+  const filtered = wrapItems.filter(item =>
+    safeToLowerCase(item.name).includes(query) ||
+    safeToLowerCase(item.description).includes(query)
+  );
 
   return (
     <section id="wraps" className="py-8 px-4">
       <h2 className="text-2xl font-bold mb-6">Grill Wraps</h2>
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {wrapItems.map(item => (
+        {filtered.map(item => (
           <div
             key={item.id}
             className="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-lg transition"

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useCartContext } from '@/context/CartContext';
 
+// Safe function for toLowerCase
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
 const DEALS = [
   {
     key: 'friends-and-fun',
@@ -80,9 +84,9 @@ export default function CartelDeals({ searchQuery }) {
   const [openKey, setOpenKey] = useState(null);
 
   // Filter deals based on search query
-  const query = (searchQuery || '').toLowerCase();
+  const query = safeToLowerCase(searchQuery);
   const filteredDeals = DEALS.filter(deal =>
-    deal.name.toLowerCase().includes(query)
+    safeToLowerCase(deal.name).includes(query)
   );
 
   return (

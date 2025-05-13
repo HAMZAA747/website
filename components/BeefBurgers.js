@@ -25,14 +25,17 @@ const beefItems = [
   },
 ];
 
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
 export default function BeefBurgers({ searchQuery }) {
   const { openModal } = useCartContext();
 
   // Filter items based on search query
-  const query = (searchQuery || '').toLowerCase();
+  const query = safeToLowerCase(searchQuery);
   const filtered = beefItems.filter(item =>
-    item.name.toLowerCase().includes(query) ||
-    item.description.toLowerCase().includes(query)
+    safeToLowerCase(item.name).includes(query) ||
+    safeToLowerCase(item.description).includes(query)
   );
 
   return (
