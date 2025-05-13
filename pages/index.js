@@ -1,5 +1,4 @@
 // pages/index.js
-
 import Head from 'next/head'
 import Layout from '@/components/Layout'
 import GrilledBurgers from '@/components/GrilledBurgers'
@@ -13,10 +12,6 @@ import Addons from '@/components/Addons'  // Renamed from Drinks
 import CartelDeals from '@/components/CartelDeals'
 import ThemeDays from '@/components/ThemeDays'
 import { FaWhatsapp } from 'react-icons/fa'
-
-// Safe toLowerCase function to avoid errors
-const safeToLowerCase = (value) => 
-  value && typeof value === 'string' ? value.toLowerCase() : '';
 
 export default function Home() {
   return (
@@ -35,9 +30,12 @@ export default function Home() {
           autoPlay 
           muted 
           loop 
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
+          {/* Fallback text if video tag is not supported */}
+          Your browser does not support the video tag.
         </video>
         {/* Semi-transparent overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-40" />
@@ -76,3 +74,4 @@ export default function Home() {
     </Layout>
   )
 }
+

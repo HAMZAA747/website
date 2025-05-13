@@ -1,7 +1,8 @@
+// context/CartContext.js
 import { createContext, useState, useContext } from 'react'
 
-// Create the Cart context
-export const CartContext = createContext()
+// Create the Cart context (default null ensures error if used outside provider)
+export const CartContext = createContext(null)
 
 // Provider component to wrap your app
 export function CartProvider({ children }) {

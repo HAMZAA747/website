@@ -6,6 +6,7 @@ import { useCartContext } from '@/context/CartContext'
 
 export default function Layout({ children }) {
   const { isModalOpen, modalItem, closeModal } = useCartContext()
+
   return (
     <>
       <Header />
