@@ -5,6 +5,10 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { useCartContext } from '@/context/CartContext'
 
+// Safe lowercase conversion
+const safeToLowerCase = (value) => 
+  typeof value === 'string' ? value.toLowerCase() : '';
+
 const categories = [
   { id: 'grilled-burgers', label: 'Grilled Burgers' },
   { id: 'beef-burgers', label: 'Beef Burgers' },
@@ -50,7 +54,7 @@ export default function Header() {
             type="text"
             placeholder="Search menu..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(safeToLowerCase(e.target.value))}
             className="w-full border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
           />
         </div>
