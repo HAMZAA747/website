@@ -1,5 +1,6 @@
-import Image from 'next/image';
-import { useCartContext } from '@/context/CartContext';
+import React from 'react'
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
 
 const beefItems = [
   {
@@ -23,20 +24,17 @@ const beefItems = [
     price: 960,
     image: '/images/big-stack.jpg',
   },
-];
-
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+]
 
 export default function BeefBurgers({ searchQuery }) {
-  const { openModal } = useCartContext();
+  const { openModal } = useCartContext()
 
   // Filter items based on search query
-  const query = safeToLowerCase(searchQuery);
+  const query = (searchQuery || '').toLowerCase()
   const filtered = beefItems.filter(item =>
-    safeToLowerCase(item.name).includes(query) ||
-    safeToLowerCase(item.description).includes(query)
-  );
+    item.name.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query)
+  )
 
   return (
     <section id="beef-burgers" className="max-w-7xl mx-auto px-4 py-12">
@@ -61,7 +59,7 @@ export default function BeefBurgers({ searchQuery }) {
               <p className="mt-2 text-gray-700">{item.description}</p>
               <p className="mt-4 text-lg font-bold text-black">Rs {item.price}</p>
               <button
-                onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Beef Burgers' }); }}
+                onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Beef Burgers' }) }}
                 className="mt-4 px-4 py-2 bg-accent text-black rounded-full hover:bg-accent-hover transition"
               >
                 Add to Cart
@@ -71,5 +69,5 @@ export default function BeefBurgers({ searchQuery }) {
         ))}
       </div>
     </section>
-  );
+  )
 }

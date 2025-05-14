@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { useCartContext } from '@/context/CartContext';
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
 
 const items = [
   {
@@ -23,20 +23,17 @@ const items = [
     description: 'Creamy & richly spiced grilled chicken thigh, loaded with Garlic Mayo, fresh lettuce — all stacked in a buttery Brioche Bun.',
     image: '/images/malai-boti-supreme.jpg',
   },
-];
-
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+]
 
 export default function GrilledBurgers({ searchQuery }) {
-  const { openModal } = useCartContext();
+  const { openModal } = useCartContext()
 
   // Filter items based on search query
-  const query = safeToLowerCase(searchQuery);
+  const query = (searchQuery || '').toLowerCase()
   const filtered = items.filter(item =>
-    safeToLowerCase(item.name).includes(query) ||
-    safeToLowerCase(item.description).includes(query)
-  );
+    item.name.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query)
+  )
 
   return (
     <section id="grilled-burgers" className="max-w-7xl mx-auto px-4 py-12">
@@ -63,7 +60,7 @@ export default function GrilledBurgers({ searchQuery }) {
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Grilled Burgers' }); }}
+                  onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Grilled Burgers' }) }}
                   className="bg-accent text-black px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition"
                 >
                   Add to Cart
@@ -74,5 +71,5 @@ export default function GrilledBurgers({ searchQuery }) {
         ))}
       </div>
     </section>
-  );
+  )
 }

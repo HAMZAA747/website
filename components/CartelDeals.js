@@ -1,9 +1,5 @@
-import { useState } from 'react';
-import { useCartContext } from '@/context/CartContext';
-
-// Safe function for toLowerCase
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+import { useState } from 'react'
+import { useCartContext } from '@/context/CartContext'
 
 const DEALS = [
   {
@@ -77,24 +73,24 @@ const DEALS = [
     ],
     price: 1450
   }
-];
+]
 
 export default function CartelDeals({ searchQuery }) {
-  const { addToCart } = useCartContext();
-  const [openKey, setOpenKey] = useState(null);
+  const { addToCart } = useCartContext()
+  const [openKey, setOpenKey] = useState(null)
 
   // Filter deals based on search query
-  const query = safeToLowerCase(searchQuery);
+  const query = (searchQuery || '').toLowerCase()
   const filteredDeals = DEALS.filter(deal =>
-    safeToLowerCase(deal.name).includes(query)
-  );
+    deal.name.toLowerCase().includes(query)
+  )
 
   return (
     <section id="cartel-deals" className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-serif text-white mb-8">Cartel Deals</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredDeals.map(deal => {
-          const isOpen = openKey === deal.key;
+          const isOpen = openKey === deal.key
           return (
             <div
               key={deal.key}
@@ -119,9 +115,10 @@ export default function CartelDeals({ searchQuery }) {
                   {deal.price} RS
                 </span>
                 <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    addToCart(deal);
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    // Add the deal to cart with a valid id and default quantity
+                    addToCart({ id: deal.key, name: deal.name, price: deal.price, qty: 1 })
                   }}
                   className="px-4 py-1 rounded-full text-sm bg-[#f2aa21] text-black"
                 >
@@ -135,9 +132,9 @@ export default function CartelDeals({ searchQuery }) {
                 </div>
               )}
             </div>
-          );
+          )
         })}
       </div>
     </section>
-  );
+  )
 }

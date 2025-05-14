@@ -1,6 +1,7 @@
-import Image from 'next/image';
-import { useCartContext } from '@/context/CartContext';
-import ProductModal from './ProductModal';
+import React from 'react'
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
+import ProductModal from './ProductModal'
 
 const crispyItems = [
   {
@@ -24,20 +25,17 @@ const crispyItems = [
     price: 425,
     image: '/images/crispy/the-crunch-dealer.jpg',
   },
-];
-
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+]
 
 export default function CrispyBurgers({ searchQuery }) {
-  const { addToCart, openModal } = useCartContext();
+  const { addToCart, openModal } = useCartContext()
 
-  // Filter items based on search query
-  const query = safeToLowerCase(searchQuery);
+  // Filter items by name or description
+  const query = (searchQuery || '').toLowerCase()
   const filtered = crispyItems.filter(item =>
-    safeToLowerCase(item.name).includes(query) ||
-    safeToLowerCase(item.description).includes(query)
-  );
+    item.name.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query)
+  )
 
   return (
     <section id="crispy-burgers" className="py-12 px-4">
@@ -64,7 +62,7 @@ export default function CrispyBurgers({ searchQuery }) {
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => { e.stopPropagation(); addToCart(item); }}
+                  onClick={e => { e.stopPropagation(); addToCart(item) }}
                   className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
@@ -77,5 +75,5 @@ export default function CrispyBurgers({ searchQuery }) {
       {/* Global Product Modal */}
       <ProductModal />
     </section>
-  );
+  )
 }

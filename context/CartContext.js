@@ -1,8 +1,7 @@
-// context/CartContext.js
 import { createContext, useState, useContext } from 'react'
 
-// Create the Cart context (default null ensures error if used outside provider)
-export const CartContext = createContext(null)
+// Create the Cart context
+export const CartContext = createContext()
 
 // Provider component to wrap your app
 export function CartProvider({ children }) {
@@ -24,7 +23,7 @@ export function CartProvider({ children }) {
 
   // Open the modal with the selected item
   const openModal = (item) => {
-    if (!item) return
+    if (!item || !item.id) return
     setModalItem(item)
     setIsModalOpen(true)
   }
@@ -57,5 +56,5 @@ export function useCart() {
   return context
 }
 
-// Alias for compatibility with existing components
+// Alias for components expecting useCartContext
 export const useCartContext = useCart
