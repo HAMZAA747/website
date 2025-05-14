@@ -1,12 +1,9 @@
-import Image from 'next/image';
-import { useState } from 'react';
-import ProductModal from './ProductModal';
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
 
-// Safe function for toLowerCase
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+export default function Addons({ searchQuery = '' }) {
+  const { openModal } = useCartContext()
 
-export default function Addons({ searchQuery }) {
   const items = [
     {
       id: 'regular-drink',
@@ -36,7 +33,7 @@ export default function Addons({ searchQuery }) {
       description: '1.5 L bottle of purified water — stay hydrated.',
       image: '/images/drinks/1-5ltr-water.jpg',
     },
-    // New sauces added as multi-select addons
+    // Sauces added as multi-select addons
     {
       id: 'sweet-chilli-sauce',
       name: 'Sweet Chilli Sauce',
@@ -58,22 +55,14 @@ export default function Addons({ searchQuery }) {
       description: 'Bold and spicy peri peri sauce for serious heat.',
       image: '/images/addons/fiery-peri.jpg',
     },
-  ];
+  ]
 
-  const [selected, setSelected] = useState(null);
-  const [open, setOpen] = useState(false);
-
-  // Filter items based on search query
-  const query = safeToLowerCase(searchQuery);
+  // ensure searchQuery is always a string
+  const q = searchQuery.toLowerCase()
   const filtered = items.filter(item =>
-    safeToLowerCase(item.name).includes(query) ||
-    safeToLowerCase(item.description).includes(query)
-  );
-
-  const openModal = item => {
-    setSelected({ ...item, category: 'Addons' });
-    setOpen(true);
-  };
+    item.name.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q)
+  )
 
   return (
     <section id="addons" className="max-w-7xl mx-auto px-4 py-12">
@@ -84,8 +73,8 @@ export default function Addons({ searchQuery }) {
             key={item.id}
             role="button"
             tabIndex={0}
-            onClick={() => openModal(item)}
-            onKeyPress={e => e.key === 'Enter' && openModal(item)}
+            onClick={() => openModal({ ...item, category: 'Addons' })}
+            onKeyPress={e => e.key === 'Enter' && openModal({ ...item, category: 'Addons' })}
             className="flex flex-col h-full bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition"
           >
             <div className="relative h-48 w-full">
@@ -99,14 +88,10 @@ export default function Addons({ searchQuery }) {
             <div className="p-5 flex flex-col flex-1">
               <h3 className="font-semibold text-xl mb-1 text-black">{item.name}</h3>
               <p className="text-gray-600 text-sm flex-1">{item.description}</p>
-
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    openModal(item);
-                  }}
+                  onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Addons' }) }}
                   className="bg-[#f2aa21] text-black px-4 py-2 rounded-full font-semibold text-sm hover:brightness-95 transition"
                 >
                   Add to Cart
@@ -116,12 +101,6 @@ export default function Addons({ searchQuery }) {
           </div>
         ))}
       </div>
-
-      <ProductModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        product={selected}
-      />
     </section>
-  );
+  )
 }

@@ -25,10 +25,10 @@ const wrapItems = [
   },
 ];
 
-const safeToLowerCase = (value) => 
+const safeToLowerCase = (value) =>
   typeof value === 'string' ? value.toLowerCase() : '';
 
-export default function Wraps({ searchQuery }) {
+export default function Wraps({ searchQuery = '' }) {
   const { addToCart, openModal } = useCartContext();
 
   // Filter items based on search query

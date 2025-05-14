@@ -75,14 +75,14 @@ const DEALS = [
   }
 ]
 
-export default function CartelDeals({ searchQuery }) {
+export default function CartelDeals({ searchQuery = '' }) {
   const { addToCart } = useCartContext()
   const [openKey, setOpenKey] = useState(null)
 
-  // Filter deals based on search query
-  const query = (searchQuery || '').toLowerCase()
+  // Always a string, then lowercase
+  const q = searchQuery.toLowerCase()
   const filteredDeals = DEALS.filter(deal =>
-    deal.name.toLowerCase().includes(query)
+    deal.name.toLowerCase().includes(q)
   )
 
   return (
@@ -117,7 +117,6 @@ export default function CartelDeals({ searchQuery }) {
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    // Add the deal to cart with a valid id and default quantity
                     addToCart({ id: deal.key, name: deal.name, price: deal.price, qty: 1 })
                   }}
                   className="px-4 py-1 rounded-full text-sm bg-[#f2aa21] text-black"

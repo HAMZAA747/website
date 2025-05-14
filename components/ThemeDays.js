@@ -13,7 +13,7 @@ const themeDays = [
   },
 ];
 
-export default function ThemeDays() {
+export default function ThemeDays({ searchQuery = '' }) {
   const [currentDay, setCurrentDay] = useState('');
 
   useEffect(() => {
@@ -25,11 +25,21 @@ export default function ThemeDays() {
     setCurrentDay(today);
   }, []);
 
+  // Always a string, then lowercase
+  const q = searchQuery.toLowerCase();
+
+  // Filter by name, description, or day
+  const filteredDays = themeDays.filter(dayObj =>
+    dayObj.name.toLowerCase().includes(q) ||
+    dayObj.description.toLowerCase().includes(q) ||
+    dayObj.day.toLowerCase().includes(q)
+  );
+
   return (
     <section id="theme-days" className="py-12 px-4 max-w-7xl mx-auto">
       <h2 className="text-3xl font-semibold mb-8">Theme Days</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {themeDays.map(dayObj => {
+        {filteredDays.map(dayObj => {
           const isOpen = currentDay === dayObj.day;
           return (
             <div

@@ -1,73 +1,80 @@
-// pages/index.js
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
 
-import Head from 'next/head'
-import Layout from '@/components/Layout'
-import GrilledBurgers from '@/components/GrilledBurgers'
-import BeefBurgers from '@/components/BeefBurgers'
-import CrispyBurgers from '@/components/CrispyBurgers'
-import Wraps from '@/components/Wraps'
-import LoadedFries from '@/components/LoadedFries'
-import Shakes from '@/components/Shakes'
-import Sides from '@/components/Sides'
-import Addons from '@/components/Addons'       // Renamed from Drinks
-import CartelDeals from '@/components/CartelDeals'
-import ThemeDays from '@/components/ThemeDays'
-import { FaWhatsapp } from 'react-icons/fa'
+const items = [
+  {
+    name: 'Tender Strips',
+    price: 410,
+    description: 'Golden, crispy chicken tenders — juicy inside, perfect crunch. Served with your choice of dip.',
+    image: '/images/sides/tender-strips.jpg',
+  },
+  {
+    name: 'Chicken Nuggets',
+    price: 345,
+    description: 'Bite-sized crispy nuggets with golden crunch and tender core — served with your favorite dip.',
+    image: '/images/sides/nuggets.jpg',
+  },
+  {
+    name: 'Sweet Chili Wings',
+    price: 450,
+    description: 'Crispy wings glazed in glossy Sweet Chili sauce — clash of heat and sweetness.',
+    image: '/images/sides/sweet-chili-wings.jpg',
+  },
+  {
+    name: 'Garlic Mayo Wings',
+    price: 450,
+    description: 'Golden-fried wings tossed in rich garlic mayo — creamy, garlicky, dangerously addictive.',
+    image: '/images/sides/garlic-mayo-wings.jpg',
+  },
+  {
+    name: 'Fiery Peri Wings',
+    price: 450,
+    description: 'Crispy bone-in wings coated in bold Fiery Peri sauce — spicy, vibrant, packed with heat.',
+    image: '/images/sides/fiery-peri-wings.jpg',
+  },
+]
 
-export default function Home() {
-  // Safe default so no component ever gets `undefined`
-  const searchQuery = ''
+// Helper for safe lowercase comparisons
+const safeToLowerCase = (value) => (typeof value === 'string' ? value.toLowerCase() : '')
+
+export default function Sides({ searchQuery = '' }) {
+  const { openModal } = useCartContext()
+
+  const q = safeToLowerCase(searchQuery)
+  const filtered = items.filter(item =>
+    safeToLowerCase(item.name).includes(q) ||
+    safeToLowerCase(item.description).includes(q)
+  )
 
   return (
-    <Layout>
-      <Head>
-        <title>Burgers Cartel</title>
-        <meta
-          name="description"
-          content="Delicious burgers, fries, shakes & more at Burgers Cartel"
-        />
-      </Head>
-
-      {/* Hero Section with Fullscreen Video */}
-      <section className="relative h-screen w-full">
-        <video
-          autoPlay
-          muted
-          loop
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-black bg-opacity-40" />
-        <div className="relative z-10 flex items-center justify-between px-6 py-4 bg-green-600">
-          <img
-            src="/logo.png"
-            alt="Burgers Cartel Logo"
-            className="h-12 object-contain"
-          />
-          <a
-            href="https://wa.me/+923375561898"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-2 bg-white text-green-600 px-3 py-1 rounded-full hover:brightness-95 transition"
+    <section id="sides" className="max-w-7xl mx-auto px-4 py-12">
+      <h2 className="text-2xl font-semibold mb-6">Sides</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filtered.map(item => (
+          <div
+            key={item.name}
+            onClick={() => openModal({ ...item, category: 'Sides' })}
+            className="flex flex-col h-full bg-white rounded-xl overflow-hidden shadow cursor-pointer"
           >
-            <FaWhatsapp size={20} />
-            <span className="font-medium">+92 337 556 1898</span>
-          </a>
-        </div>
-      </section>
-
-      {/* Menu Sections (all filters get a real string) */}
-      <GrilledBurgers searchQuery={searchQuery} />
-      <BeefBurgers   searchQuery={searchQuery} />
-      <CrispyBurgers searchQuery={searchQuery} />
-      <Wraps />
-      <LoadedFries   searchQuery={searchQuery} />
-      <Shakes        searchQuery={searchQuery} />
-      <Sides         searchQuery={searchQuery} />
-      <Addons />
-      <CartelDeals   searchQuery={searchQuery} />
-      <ThemeDays />
-    </Layout>
+            <div className="relative h-48 w-full">
+              <Image src={item.image} alt={item.name} fill style={{ objectFit: 'cover' }} />
+            </div>
+            <div className="p-4 flex flex-col flex-1">
+              <h3 className="font-semibold text-lg text-black">{item.name}</h3>
+              <p className="mt-2 text-sm text-gray-600 flex-1">{item.description}</p>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="font-medium text-black">Rs {item.price}</span>
+                <button
+                  onClick={e => { e.stopPropagation(); openModal({ ...item, category: 'Sides' }) }}
+                  className="bg-accent text-black px-3 py-1 rounded-full text-sm font-semibold hover:brightness-90 transition"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import { useCartContext } from '@/context/CartContext'
-import ProductModal from './ProductModal'
 
 const crispyItems = [
   {
@@ -27,14 +26,14 @@ const crispyItems = [
   },
 ]
 
-export default function CrispyBurgers({ searchQuery }) {
+export default function CrispyBurgers({ searchQuery = '' }) {
   const { addToCart, openModal } = useCartContext()
 
-  // Filter items by name or description
-  const query = (searchQuery || '').toLowerCase()
+  // Always a string, then lowercase
+  const q = searchQuery.toLowerCase()
   const filtered = crispyItems.filter(item =>
-    item.name.toLowerCase().includes(query) ||
-    item.description.toLowerCase().includes(query)
+    item.name.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q)
   )
 
   return (
@@ -58,7 +57,6 @@ export default function CrispyBurgers({ searchQuery }) {
             <div className="p-5 flex flex-col flex-1">
               <h3 className="font-semibold text-xl mb-1 text-black">{item.name}</h3>
               <p className="text-gray-600 text-sm flex-1">{item.description}</p>
-
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
@@ -72,8 +70,7 @@ export default function CrispyBurgers({ searchQuery }) {
           </div>
         ))}
       </div>
-      {/* Global Product Modal */}
-      <ProductModal />
+      {/* ProductModal (from Layout) handles the modal display */}
     </section>
   )
 }

@@ -1,4 +1,4 @@
-// pages/index.js
+import { useState } from 'react'
 import Head from 'next/head'
 import Layout from '@/components/Layout'
 import GrilledBurgers from '@/components/GrilledBurgers'
@@ -14,8 +14,10 @@ import ThemeDays from '@/components/ThemeDays'
 import { FaWhatsapp } from 'react-icons/fa'
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState('')
+
   return (
-    <Layout>
+    <Layout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
       <Head>
         <title>Burgers Cartel</title>
         <meta 
@@ -61,17 +63,16 @@ export default function Home() {
       </section>
 
       {/* Menu Sections */}
-      <GrilledBurgers />
-      <BeefBurgers />
-      <CrispyBurgers />
-      <Wraps />
-      <LoadedFries />
-      <Shakes />
-      <Sides />
-      <Addons />      {/* Renamed Drinks section */}
-      <CartelDeals />
-      <ThemeDays />
+      <GrilledBurgers searchQuery={searchQuery} />
+      <BeefBurgers searchQuery={searchQuery} />
+      <CrispyBurgers searchQuery={searchQuery} />
+      <Wraps searchQuery={searchQuery} />
+      <LoadedFries searchQuery={searchQuery} />
+      <Shakes searchQuery={searchQuery} />
+      <Sides searchQuery={searchQuery} />
+      <Addons searchQuery={searchQuery} />      {/* Renamed Drinks section */}
+      <CartelDeals searchQuery={searchQuery} />
+      <ThemeDays searchQuery={searchQuery} />
     </Layout>
   )
 }
-

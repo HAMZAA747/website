@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
@@ -6,28 +6,26 @@ import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { useCartContext } from '@/context/CartContext'
 
 // Safe lowercase conversion
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+const safeToLowerCase = (value) =>
+  typeof value === 'string' ? value.toLowerCase() : ''
 
 const categories = [
   { id: 'grilled-burgers', label: 'Grilled Burgers' },
-  { id: 'beef-burgers', label: 'Beef Burgers' },
+  { id: 'beef-burgers',   label: 'Beef Burgers' },
   { id: 'crispy-burgers', label: 'Crispy Burgers' },
-  { id: 'wraps', label: 'Wraps' },
-  { id: 'loaded-fries', label: 'Loaded Fries' },
-  { id: 'sides', label: 'Sides' },
-  { id: 'shakes', label: 'Shakes' },
-  { id: 'addons', label: 'Addons' },
-  { id: 'cartel-deals', label: 'Cartel Deals' },
-  { id: 'theme-days', label: 'Theme Days' },
+  { id: 'wraps',          label: 'Wraps' },
+  { id: 'loaded-fries',   label: 'Loaded Fries' },
+  { id: 'sides',          label: 'Sides' },
+  { id: 'shakes',         label: 'Shakes' },
+  { id: 'addons',         label: 'Addons' },
+  { id: 'cartel-deals',   label: 'Cartel Deals' },
+  { id: 'theme-days',     label: 'Theme Days' },
 ]
 
-export default function Header() {
-  const [searchQuery, setSearchQuery] = useState('')
+export default function Header({ searchQuery, setSearchQuery }) {
   const [activeCat, setActiveCat] = useState(categories[0].id)
   const { openModal } = useCartContext()
 
-  // Scroll to section on category click
   const handleCategoryClick = (id) => {
     setActiveCat(id)
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -90,8 +88,8 @@ export default function Header() {
                 <button
                   onClick={() => handleCategoryClick(cat.id)}
                   className={`px-4 py-1 rounded-full whitespace-nowrap transition ${
-                    activeCat === cat.id 
-                      ? 'bg-accent text-black' 
+                    activeCat === cat.id
+                      ? 'bg-accent text-black'
                       : 'bg-gray-200 text-gray-700'
                   }`.trim()}
                 >

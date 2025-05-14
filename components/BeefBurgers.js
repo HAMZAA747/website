@@ -26,14 +26,14 @@ const beefItems = [
   },
 ]
 
-export default function BeefBurgers({ searchQuery }) {
+export default function BeefBurgers({ searchQuery = '' }) {
   const { openModal } = useCartContext()
 
-  // Filter items based on search query
-  const query = (searchQuery || '').toLowerCase()
+  // Ensure searchQuery is always a string
+  const q = searchQuery.toLowerCase()
   const filtered = beefItems.filter(item =>
-    item.name.toLowerCase().includes(query) ||
-    item.description.toLowerCase().includes(query)
+    item.name.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q)
   )
 
   return (

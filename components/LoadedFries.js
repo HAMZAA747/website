@@ -1,11 +1,12 @@
-import Image from 'next/image';
-import { useCartContext } from '@/context/CartContext';
+import React from 'react'
+import Image from 'next/image'
+import { useCartContext } from '@/context/CartContext'
 
 const friesItems = [
   {
     id: 'nashville-hot-crunch',
     name: 'Nashville Hot Crunch',
-    description: 'Crispy Nashville fillet, Buffalo sauce, melted cheese with toppings.',
+    description: 'Crispy fries tossed in Nashville hot seasoning — bold, spicy, and unforgettable.',
     price: 745,
     image: '/images/fries/nashville-hot-crunch.jpg',
   },
@@ -44,20 +45,17 @@ const friesItems = [
     price: 295,
     image: '/images/fries/cartel-crush.jpg',
   },
-];
+]
 
-const safeToLowerCase = (value) => 
-  typeof value === 'string' ? value.toLowerCase() : '';
+export default function LoadedFries({ searchQuery = '' }) {
+  const { openModal, addToCart } = useCartContext()
 
-export default function LoadedFries({ searchQuery }) {
-  const { openModal, addToCart } = useCartContext();
-
-  // Filter items based on search query
-  const query = safeToLowerCase(searchQuery);
+  // Ensure searchQuery is always a string
+  const q = searchQuery.toLowerCase()
   const filtered = friesItems.filter(item =>
-    safeToLowerCase(item.name).includes(query) ||
-    safeToLowerCase(item.description).includes(query)
-  );
+    item.name.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q)
+  )
 
   return (
     <section id="loaded-fries" className="max-w-7xl mx-auto px-4 py-12">
@@ -80,14 +78,10 @@ export default function LoadedFries({ searchQuery }) {
             <div className="p-5 flex flex-col flex-1">
               <h3 className="font-semibold text-xl mb-1 text-black">{item.name}</h3>
               <p className="text-gray-600 text-sm flex-1">{item.description}</p>
-
               <div className="mt-4 flex items-center justify-between">
                 <span className="font-bold text-lg text-black">Rs {item.price}</span>
                 <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    addToCart({ ...item, category: 'Loaded Fries' });
-                  }}
+                  onClick={e => { e.stopPropagation(); addToCart({ ...item, category: 'Loaded Fries' }) }}
                   className="px-4 py-2 rounded-full text-sm bg-accent hover:bg-[#e29a1e] text-white transition"
                 >
                   Add to Cart
@@ -98,5 +92,5 @@ export default function LoadedFries({ searchQuery }) {
         ))}
       </div>
     </section>
-  );
+  )
 }
